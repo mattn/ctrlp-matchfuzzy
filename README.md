@@ -13,7 +13,7 @@ let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
 For [vim-plug](https://github.com/junegunn/vim-plug) plugin manager:
 
 ```
-Plug 'ctrlp-matchfuzzy'
+Plug 'mattn/ctrlp-matchfuzzy'
 ```
 
 ## License
