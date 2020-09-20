@@ -4,6 +4,9 @@ endfunction
 
 function! ctrlp_matchfuzzy#matcher(items, str, limit, mmode, ispath, crfile, regex) abort
   call clearmatches()
+  if empty(a:str)
+    return copy(a:items)
+  endif
   call matchadd('CtrlPMatch', '\c' .. s:esc(a:str))
   call matchadd('CtrlPLinePre', '^>')
   return matchfuzzy(a:items, a:str)
