@@ -7,9 +7,15 @@ function! ctrlp_matchfuzzy#matcher(items, str, limit, mmode, ispath, crfile, reg
   if empty(a:str)
     return copy(a:items)
   endif
-  call matchadd('CtrlPMatch', '\c' .. s:esc(a:str))
-  call matchadd('CtrlPLinePre', '^>')
-  return matchfuzzy(a:items, a:str)
+  if a:regex
+    call matchadd('CtrlPMatch', a:str)
+    call matchadd('CtrlPLinePre', '^>')
+    return filter(copy(a:items), 'v:val =~ a:str')
+  else
+    call matchadd('CtrlPMatch', '\c' .. s:esc(a:str))
+    call matchadd('CtrlPLinePre', '^>')
+    return matchfuzzy(a:items, a:str)
+  endif
 endfunction
 
 
