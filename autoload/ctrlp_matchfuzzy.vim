@@ -1,21 +1,24 @@
 function s:esc(s) abort
-  return substitute(a:s, '.', '\0[^\0]\\{-}', 'g')
+  return '\c' . substitute(tolower(a:s), '.', '\0[^\0]\\{-}', 'g')
 endfunction
+
+let s:timer = 0
 
 function! ctrlp_matchfuzzy#matcher(items, str, limit, mmode, ispath, crfile, regex) abort
-  call clearmatches()
   if empty(a:str)
-    return copy(a:items)
+    call clearmatches()
+    return a:items[:&lines]
   endif
+
+  let l:str = a:regex ? a:str : s:esc(a:str)
+  call timer_stop(s:timer)
+  let s:timer = timer_start(10, {t ->
+  \ [clearmatches(), matchadd('CtrlPMatch', l:str), matchadd('CtrlPLinePre', '^>'), execute('redraw')]
+  \}, {'repeat': 0})
+
   if a:regex
-    call matchadd('CtrlPMatch', a:str)
-    call matchadd('CtrlPLinePre', '^>')
-    return filter(copy(a:items), 'v:val =~ a:str')
+    return filter(a:items, 'v:val =~ a:str')
   else
-    call matchadd('CtrlPMatch', '\c' .. s:esc(a:str))
-    call matchadd('CtrlPLinePre', '^>')
-    return matchfuzzy(a:items, a:str)
+    return matchfuzzy(a:items, a:str, {'limit': &lines})
   endif
 endfunction
-
-
