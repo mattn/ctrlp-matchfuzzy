@@ -13,7 +13,7 @@ function! ctrlp_matchfuzzy#matcher(items, str, limit, mmode, ispath, crfile, reg
   let l:str = a:regex ? a:str : s:esc(a:str)
   call timer_stop(s:timer)
   let s:timer = timer_start(10, {t ->
-  \ [clearmatches(), matchadd('CtrlPMatch', l:str), matchadd('CtrlPLinePre', '^>'), execute('redraw')]
+  \ [clearmatches(), matchadd('CtrlPMatch', l:str), hlexists('CtrlPLinePre') ? matchadd('CtrlPLinePre', '^>') : '', execute('redraw')]
   \}, {'repeat': 0})
 
   if a:regex
