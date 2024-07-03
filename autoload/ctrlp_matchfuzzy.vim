@@ -17,7 +17,7 @@ function! ctrlp_matchfuzzy#matcher(items, str, limit, mmode, ispath, crfile, reg
   \}, {'repeat': 0})
 
   if a:regex
-    return filter(a:items, 'v:val =~ a:str')
+    return filter(copy(a:items), 'v:val =~ a:str')
   else
     return matchfuzzy(a:items, a:str, {'limit': &lines})
   endif
